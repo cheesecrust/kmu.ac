@@ -21,10 +21,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'm^m=98_q_zyzwyl9sf*cv&gqw=$e7%o8jkqs+s!mafw_5(o88&')
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY', 'm^m=98_q_zyzwyl9sf*cv&gqw=$e7%o8jkqs+s!mafw_5(o88&')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) ) 
+DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
 ALLOWED_HOSTS = ['*']
 
@@ -126,7 +127,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-SOCIALACCOUNT_LOGIN_ON_GET=True
+SOCIALACCOUNT_LOGIN_ON_GET = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -136,7 +137,7 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': [
             'profile',
             'email',
-            'https://www.googleapis.com/auth/userinfo.profile', 
+            'https://www.googleapis.com/auth/userinfo.profile',
             'https://www.googleapis.com/auth/userinfo.email'
         ],
         'AUTH_PARAMS': {
@@ -145,19 +146,30 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-AUTHENTICATION_BACKENDS = (  
-    # Needed to login by username in Django admin, regardless of 'allauth' 
-    'django.contrib.auth.backends.ModelBackend', 
-    
-    # 'allauth' specific authentication methods, such as login by email 
-    'allauth.account.auth_backends.AuthenticationBackend', 
-    
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of 'allauth'
+    'django.contrib.auth.backends.ModelBackend',
+
+    # 'allauth' specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+
 )
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'TIMEOUT': 5,
+        },
+    }
+}
 
 SITE_ID = 1
 
-LOGIN_REDIRECT_URL = '/' ### 오류가 나면 홈으로 돌아와라
+LOGIN_REDIRECT_URL = '/'  # 오류가 나면 홈으로 돌아와라
 
 
-db_from_env = dj_database_url.config(conn_max_age=500) # DB 설정부분 아래에 입력 
-DATABASES['default'].update(db_from_env) # DB 설정부분 아래에 입력
+db_from_env = dj_database_url.config(conn_max_age=500)  # DB 설정부분 아래에 입력
+DATABASES['default'].update(db_from_env)  # DB 설정부분 아래에 입력
